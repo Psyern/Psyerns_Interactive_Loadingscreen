@@ -1,0 +1,9 @@
+# build output
+@Psyerns_Interactive_Loadingscreen/
+*.pbo
+*.bisign
+*.biprivatekey
+
+# python
+__pycache__/
+*.pyc
