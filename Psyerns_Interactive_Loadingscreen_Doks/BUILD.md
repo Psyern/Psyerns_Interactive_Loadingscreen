@@ -17,7 +17,7 @@ Manuell im AddonBuilder:
 - Quelle: `Psyerns_Interactive_Loadingscreen/`
 - **Prefix: `Psyerns_Interactive_Loadingscreen`** – alle Pfade in Scripts und JSON hängen daran
 - „Binarize" aus (pack only), Include-Liste: `tools/include.txt`
-  (`*.c;*.cpp;*.layout;*.edds;*.json;*.csv;*.xml;*.imageset`) – sonst fehlen JSON/Layouts im PBO
+  (`*.c;*.cpp;*.layout;*.edds;*.json;*.csv;*.xml;*.imageset;*.ogg`) – sonst fehlen JSON/Layouts/Musik im PBO
 
 ## Texturen neu generieren
 
@@ -30,6 +30,14 @@ python Psyerns_Interactive_Loadingscreen_Doks/tools/psy_ils_generate_textures.py
 
 Schreibt alle `.edds` nach `Psyerns_Interactive_Loadingscreen/gui/textures/` und PNG-Vorschauen nach
 `Psyerns_Interactive_Loadingscreen_Doks/previews/`. Farben, Motive und Seed (`SEED`) stehen oben im Skript.
+
+Das Deadmans-Echo-Preset entsteht aus den Original-Artworks von FixedLoadingScreen:
+
+```
+python Psyerns_Interactive_Loadingscreen_Doks/tools/psy_ils_build_dme_preset.py "C:/Pfad/zu/FixedLoadingScreen/data"
+```
+
+Siehe [MIGRATION_FIXEDLOADINGSCREEN.md](MIGRATION_FIXEDLOADINGSCREEN.md).
 
 ## Compile-Test ohne Client
 

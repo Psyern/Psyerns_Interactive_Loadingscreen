@@ -7,8 +7,18 @@ Zum Ausprobieren ohne neu zu packen kann ein Client eine Kopie nach
 (Profilordner = `-profiles=` des Clients, standardmäßig `Dokumente\DayZ`). Diese Datei hat Vorrang.
 Für den Server-Einsatz gehört die endgültige Konfiguration ins PBO (siehe [CUSTOM_LAYERS.md](CUSTOM_LAYERS.md)).
 
+## Presets
+
+| Datei | Inhalt |
+|---|---|
+| `Data/psy_ils_config.json` | **aktiv** – Deadmans Echo (identisch mit dem Preset unten) |
+| `Data/presets/psy_ils_deadmans_echo.json` | DME-Artworks als Parallax, eigenes Bild je Screen, DayZ-Logo aus, DME-Menümusik ([MIGRATION_FIXEDLOADINGSCREEN.md](MIGRATION_FIXEDLOADINGSCREEN.md)) |
+| `Data/presets/psy_ils_dusk.json` | neutrale prozedurale Abenddämmerung, Vanilla-Logo und -Musik |
+
+Preset wechseln: Datei nach `Data/psy_ils_config.json` kopieren und neu packen.
+
 Im Client-Log (`script_*.log`) steht beim Start, welche Datei geladen wurde:
-`[PSY_ILS] Config loaded from ... (10 layers)`. Fehlerhafte JSON wird dort mit Grund gemeldet;
+`[PSY_ILS] Config loaded from ...`. Fehlerhafte JSON wird dort mit Grund gemeldet;
 fehlt jede Konfiguration, bleibt der Vanilla-Loadingscreen aktiv.
 
 ## Globale Optionen
@@ -19,6 +29,9 @@ fehlt jede Konfiguration, bleibt der Vanilla-Loadingscreen aktiv.
 | `Enabled` | true | – | Hauptschalter |
 | `OnLoadingScreen` | true | – | Szene im Engine-Loadingscreen |
 | `OnLoginScreens` | true | – | Szene im Login-Countdown und in der Warteschlange |
+| `HideDayZLogo` | false | – | DayZ-Logo im Engine-Loadingscreen ausblenden |
+| `HideModdedWarning` | false | – | Hinweis „modifizierte Version des Spiels" ausblenden |
+| `MenuMusicSoundSets` | [] | – | SoundSet-Namen (aus `CfgSoundSets`), die die Hauptmenü-Musik ersetzen; leer = Vanilla-Musik. Mitgeliefert: `PSY_ILS_DME_Menu_SoundSet` |
 | `MaxShift` | 0.04 | 0–0.25 | Horizontale Verschiebung einer Ebene mit `Depth` 1, Anteil der Bildschirmbreite |
 | `MaxShiftVertical` | 0.025 | 0–0.25 | Vertikale Verschiebung bei `Depth` 1, Anteil der Bildschirmhöhe |
 | `MaxRollDeg` | 0.6 | 0–10 | Neigung (Grad) einer `Depth`-1-Ebene bei voller Mausauslenkung; 0 = aus |
@@ -28,7 +41,9 @@ fehlt jede Konfiguration, bleibt der Vanilla-Loadingscreen aktiv.
 | `IdleDriftSpeed` | 0.25 | 0–10 | Geschwindigkeit des automatischen Schwenks |
 | `BreathingScale` | 0.012 | 0–0.2 | Zoom-Puls (× Tiefe); 0 = aus |
 | `BreathingSpeed` | 0.35 | 0–10 | Geschwindigkeit des Zoom-Pulses |
-| `Layers` | – | – | Ebenen, **von hinten nach vorne** |
+| `Layers` | – | – | Ebenen des Engine-Loadingscreens, **von hinten nach vorne** |
+| `LoginTimeLayers` | [] | – | Eigene Ebenen für den Login-Countdown; leer = `Layers` |
+| `LoginQueueLayers` | [] | – | Eigene Ebenen für die Warteschlange; leer = `Layers` |
 
 > **Am besten alle Schlüssel ausschreiben.** Fehlende Schlüssel kommen beim JSON-Laden als `0` an.
 > Für Werte, bei denen 0 sinnlos ist (`Alpha`, `Count`, `MinSize`, `MaxSize`, `MaxDepth`, `RiseSpeed`, `Size`,
@@ -36,9 +51,9 @@ fehlt jede Konfiguration, bleibt der Vanilla-Loadingscreen aktiv.
 > (`Depth`, `MaxShift`, `MaxRollDeg`, `SwayAmplitude` …), bleibt es bei 0 – z. B. fehlendes `Depth` = statische Ebene.
 > Eine Ebene ganz ausblenden: aus dem Array entfernen (Alpha 0 wird als „nicht gesetzt" = 1 gewertet).
 
-## Ebenen (`Layers`)
+## Ebenen (`Layers`, `LoginTimeLayers`, `LoginQueueLayers`)
 
-Die Reihenfolge im Array ist die Zeichenreihenfolge: der erste Eintrag liegt ganz hinten.
+Alle drei Arrays haben dasselbe Format. Die Reihenfolge im Array ist die Zeichenreihenfolge: der erste Eintrag liegt ganz hinten.
 Jeder Eintrag hat einen `Type`:
 
 ### `image` – Bildebene
@@ -51,10 +66,12 @@ Jeder Eintrag hat einen `Type`:
 | `Additive` | false | Additive Blendung (für Licht/Glow-Ebenen) |
 | `SwayAmplitude` | 0 | Horizontales Pendeln, Anteil der Bildschirmbreite (0–0.25) |
 | `SwaySpeed` | 0 | Pendelgeschwindigkeit in rad/s |
+| `NoOverscan` | false | `true`: Ebene bleibt exakt bildschirmgroß (siehe unten) |
 
 Die Ebene wird automatisch so viel größer als der Bildschirm gezogen, dass Verschiebung,
 Pendeln und Neigung nie einen Rand freilegen. Ebenen mit `Depth` 0 und ohne Sway füllen
-exakt den Bildschirm.
+exakt den Bildschirm. Für Schrift- oder Logo-Ebenen mit transparentem Rand, deren Inhalt nah am
+Bildrand liegt, verhindert `NoOverscan` das Abschneiden – die Ebene bewegt sich trotzdem.
 
 ### `particles` – Partikelschwarm
 
@@ -80,7 +97,25 @@ exakt den Bildschirm.
 
 Nur der erste `cursorlight`-Eintrag wird verwendet.
 
-## Standard-Szene
+## Szene „Deadmans Echo" (aktiv)
+
+Je Screen dieselbe Struktur, nur das Artwork wechselt (DME1 Loadingscreen, DME2 Countdown, DME3 Queue):
+
+| # | Typ | Inhalt | Depth |
+|---|---|---|---|
+| 0 | image | Artwork-Hintergrund (Schrift herausretuschiert) | 0.06 |
+| 1 | image | Rauchband (pendelt) | 0.3 |
+| 2 | particles | ferne Glut, 22 Stück | 0.25–0.45 |
+| 3 | image | dunkler Boden | 0.5 |
+| 4 | cursorlight | warmes Licht | – |
+| 5 | image | Gesichter-Silhouetten | 0.8 |
+| 6 | particles | nahe Glut, 16 Stück | 0.8–1.3 |
+| 7 | image | „DEADMANS ECHO" + URL (`NoOverscan`) | 0.3 |
+| 8 | image | Vignette | 0 |
+
+## Szene „Dusk" (Preset)
+
+![Dusk im Spiel](previews/psy_ils_ingame.png)
 
 | # | Typ | Textur | Depth |
 |---|---|---|---|

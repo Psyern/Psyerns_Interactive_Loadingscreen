@@ -5,7 +5,7 @@ class CfgPatches
 		units[] = {};
 		weapons[] = {};
 		requiredVersion = 0.1;
-		requiredAddons[] = {"DZ_Data", "DZ_Scripts"};
+		requiredAddons[] = {"DZ_Data", "DZ_Scripts", "DZ_Sounds_Effects"};
 	};
 };
 
@@ -36,5 +36,32 @@ class CfgMods
 				files[] = {"Psyerns_Interactive_Loadingscreen/Scripts/3_Game"};
 			};
 		};
+	};
+};
+
+// Main menu music (Deadmans Echo preset). Only played when the JSON lists the SoundSet in
+// "MenuMusicSoundSets" - defining it here alone changes nothing.
+class CfgSoundShaders
+{
+	class PSY_ILS_DME_Menu_SoundShader
+	{
+		samples[] =
+		{
+			{"Psyerns_Interactive_Loadingscreen\sound\psy_ils_dme_menu1", 1},
+			{"Psyerns_Interactive_Loadingscreen\sound\psy_ils_dme_menu2", 1},
+			{"Psyerns_Interactive_Loadingscreen\sound\psy_ils_dme_menu3", 1}
+		};
+		volume = 0.5;
+	};
+};
+
+class CfgSoundSets
+{
+	class PSY_ILS_DME_Menu_SoundSet
+	{
+		soundShaders[] = {"PSY_ILS_DME_Menu_SoundShader"};
+		volumeFactor = 1;
+		frequencyFactor = 1;
+		spatial = 0;
 	};
 };

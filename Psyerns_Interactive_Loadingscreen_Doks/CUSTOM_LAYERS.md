@@ -32,10 +32,17 @@ Der Konverter schreibt das Enfusion-Format (BGRA8, LZ4-Mipmaps) und bricht bei N
 Faustregeln für die Tiefe:
 - Himmel 0.02–0.08, Berge 0.1–0.2, Mittelgrund 0.3–0.6, Vordergrund 0.9–1.3
 - Große Unterschiede zwischen benachbarten Ebenen = stärkerer 3D-Effekt, aber auch mehr „Pappaufsteller"-Look.
-- Logos/Text mit `Depth` 0 bleiben fest stehen.
+- Logos/Text mit `Depth` 0 bleiben fest stehen. Sollen sie sich mitbewegen, aber nie am Rand abgeschnitten werden: `"NoOverscan": true`.
 
 Texturen dürfen auch aus einem **anderen** PBO kommen (z. B. ein eigenes Branding-Addon) –
 der Pfad ist dann einfach dessen Prefix.
+
+## Flaches Artwork automatisch zerlegen
+
+Hast du nur ein fertiges Bild (Logo + Motiv in einem), zeigt `tools/psy_ils_build_dme_preset.py`, wie man es
+per Skript in Ebenen zerlegt: Schrift per Farbmaske freistellen und im Hintergrund retuschieren, Randmotive als
+nahe Ebene ausschneiden, unteren Bildteil als Boden. Das Skript ist auf das DME-Template zugeschnitten
+(`TEXT_BOXES`, Bandbreiten) und lässt sich für andere Artworks anpassen.
 
 ## 4. Testen ohne Neupacken
 

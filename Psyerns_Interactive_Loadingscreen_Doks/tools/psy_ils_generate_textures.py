@@ -68,6 +68,48 @@ def is_pot(v):
 	return v > 0 and (v & (v - 1)) == 0
 
 
+def decode_edds(path):
+	"""Reads an uncompressed BGRA8 .edds (COPY or LZ4 mips) and returns the top mip as RGBA image."""
+	data = open(path, 'rb').read()
+	if data[:4] != b'DDS ':
+		raise ValueError(f'{path}: not a DDS/EDDS file')
+	if data[84:88] != b'\0\0\0\0':
+		raise ValueError(f'{path}: block-compressed ({data[84:88]}) EDDS is not supported, convert from the source image')
+	height = struct.unpack_from('<I', data, 12)[0]
+	width = struct.unpack_from('<I', data, 16)[0]
+	mips = struct.unpack_from('<I', data, 28)[0]
+	off = 128
+	blocks = []
+	for _ in range(mips):
+		blocks.append((data[off:off + 4], struct.unpack_from('<I', data, off + 4)[0]))
+		off += 8
+	pos = off
+	for tag, size in blocks[:-1]:
+		pos += size
+	tag, size = blocks[-1]
+	raw = data[pos:pos + size]
+	expected = width * height * 4
+	if tag == b'COPY':
+		pixels = raw[:expected]
+	else:
+		total = struct.unpack_from('<I', raw, 0)[0]
+		p = 4
+		out = bytearray()
+		while p + 4 <= len(raw) and len(out) < total:
+			hdr = struct.unpack_from('<I', raw, p)[0]
+			p += 4
+			csize = hdr & 0x7FFFFFFF
+			chunk = raw[p:p + csize]
+			p += csize
+			usize = min(CHUNK, total - len(out))
+			if out:
+				out += lz4.block.decompress(chunk, uncompressed_size=usize, dict=bytes(out[-CHUNK:]))
+			else:
+				out += lz4.block.decompress(chunk, uncompressed_size=usize)
+		pixels = bytes(out[:expected])
+	return Image.frombytes('RGBA', (width, height), pixels, 'raw', 'BGRA')
+
+
 def encode_edds(img, path):
 	img = img.convert('RGBA')
 	width, height = img.size

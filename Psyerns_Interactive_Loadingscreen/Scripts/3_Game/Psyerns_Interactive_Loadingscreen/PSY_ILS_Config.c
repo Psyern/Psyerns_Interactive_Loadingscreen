@@ -35,6 +35,9 @@ class PSY_ILS_LayerData
 	float SwayAmplitude = 0.0;
 	//! sway speed in radians per second
 	float SwaySpeed = 0.0;
+	//! true: the layer keeps exactly screen size and may reveal its (transparent) edges while moving.
+	//! For text/logo layers whose content sits close to the border and must never be cropped.
+	bool NoOverscan = false;
 
 	// particles
 	int Count = 20;
@@ -59,6 +62,9 @@ class PSY_ILS_ConfigData
 	bool Enabled = true;
 	bool OnLoadingScreen = true;
 	bool OnLoginScreens = true;
+	//! hide the DayZ logo and the "modified version" note on the engine loading screen
+	bool HideDayZLogo = false;
+	bool HideModdedWarning = false;
 
 	//! horizontal shift of a depth 1 layer, fraction of the screen width
 	float MaxShift = 0.04;
@@ -76,11 +82,36 @@ class PSY_ILS_ConfigData
 	float BreathingScale = 0.012;
 	float BreathingSpeed = 0.35;
 
+	//! engine loading screen (and fallback for the two login screens)
 	ref array<ref PSY_ILS_LayerData> Layers;
+	//! "Loading in X seconds" countdown; empty = use Layers
+	ref array<ref PSY_ILS_LayerData> LoginTimeLayers;
+	//! server queue screen; empty = use Layers
+	ref array<ref PSY_ILS_LayerData> LoginQueueLayers;
+
+	//! SoundSets that replace the main menu music (CfgSoundSets names); empty = vanilla music
+	ref array<string> MenuMusicSoundSets;
 
 	void PSY_ILS_ConfigData()
 	{
 		Layers = new array<ref PSY_ILS_LayerData>();
+		LoginTimeLayers = new array<ref PSY_ILS_LayerData>();
+		LoginQueueLayers = new array<ref PSY_ILS_LayerData>();
+		MenuMusicSoundSets = new array<string>();
+	}
+
+	array<ref PSY_ILS_LayerData> GetLoginTimeLayers()
+	{
+		if (LoginTimeLayers.Count() > 0)
+			return LoginTimeLayers;
+		return Layers;
+	}
+
+	array<ref PSY_ILS_LayerData> GetLoginQueueLayers()
+	{
+		if (LoginQueueLayers.Count() > 0)
+			return LoginQueueLayers;
+		return Layers;
 	}
 
 	void Validate()
@@ -97,16 +128,30 @@ class PSY_ILS_ConfigData
 		BreathingScale = Math.Clamp(BreathingScale, 0.0, 0.2);
 		BreathingSpeed = Math.Clamp(BreathingSpeed, 0.0, 10.0);
 
+		// arrays missing in the JSON arrive as null
 		if (!Layers)
 			Layers = new array<ref PSY_ILS_LayerData>();
+		if (!LoginTimeLayers)
+			LoginTimeLayers = new array<ref PSY_ILS_LayerData>();
+		if (!LoginQueueLayers)
+			LoginQueueLayers = new array<ref PSY_ILS_LayerData>();
+		if (!MenuMusicSoundSets)
+			MenuMusicSoundSets = new array<string>();
 
-		for (int i = Layers.Count() - 1; i >= 0; i--)
+		ValidateLayers(Layers, "Layers");
+		ValidateLayers(LoginTimeLayers, "LoginTimeLayers");
+		ValidateLayers(LoginQueueLayers, "LoginQueueLayers");
+	}
+
+	protected void ValidateLayers(array<ref PSY_ILS_LayerData> layers, string arrayName)
+	{
+		for (int i = layers.Count() - 1; i >= 0; i--)
 		{
-			PSY_ILS_LayerData layer = Layers.Get(i);
+			PSY_ILS_LayerData layer = layers.Get(i);
 			if (!layer || layer.Texture == string.Empty)
 			{
-				PrintFormat("[PSY_ILS] Layer %1 has no texture, skipped", i);
-				Layers.Remove(i);
+				PrintFormat("[PSY_ILS] %1[%2] has no texture, skipped", arrayName, i);
+				layers.Remove(i);
 				continue;
 			}
 
@@ -118,7 +163,7 @@ class PSY_ILS_ConfigData
 			layer.Type.ToLower();
 			if (layer.Type != PSY_ILS_Const.TYPE_IMAGE && layer.Type != PSY_ILS_Const.TYPE_PARTICLES && layer.Type != PSY_ILS_Const.TYPE_CURSORLIGHT)
 			{
-				PrintFormat("[PSY_ILS] Layer %1 has unknown Type '%2', treated as image", i, layer.Type);
+				PrintFormat("[PSY_ILS] %1[%2] has unknown Type '%3', treated as image", arrayName, i, layer.Type);
 				layer.Type = PSY_ILS_Const.TYPE_IMAGE;
 			}
 
@@ -198,10 +243,7 @@ class PSY_ILS_Config
 			return null;
 		}
 
-		if (!data.Layers)
-			data.Layers = new array<ref PSY_ILS_LayerData>();
-
-		PrintFormat("[PSY_ILS] Config loaded from %1 (%2 layers)", path, data.Layers.Count());
+		PrintFormat("[PSY_ILS] Config loaded from %1", path);
 		return data;
 	}
 }

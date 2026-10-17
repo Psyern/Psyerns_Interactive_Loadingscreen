@@ -1,1 +1,1 @@
-*.c;*.cpp;*.layout;*.edds;*.json;*.csv;*.xml;*.imageset
+*.c;*.cpp;*.layout;*.edds;*.json;*.csv;*.xml;*.imageset;*.ogg

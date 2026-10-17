@@ -3,6 +3,8 @@
 	"Enabled": true,
 	"OnLoadingScreen": true,
 	"OnLoginScreens": true,
+	"HideDayZLogo": true,
+	"HideModdedWarning": true,
 	"MaxShift": 0.04,
 	"MaxShiftVertical": 0.025,
 	"MaxRollDeg": 0.6,
@@ -12,16 +14,38 @@
 	"IdleDriftSpeed": 0.25,
 	"BreathingScale": 0.012,
 	"BreathingSpeed": 0.35,
+	"MenuMusicSoundSets": ["PSY_ILS_DME_Menu_SoundSet"],
 	"Layers": [
-		{ "Type": "image", "Texture": "Psyerns_Interactive_Loadingscreen/gui/textures/psy_ils_layer0_sky.edds", "Depth": 0.05, "Alpha": 1.0 },
-		{ "Type": "image", "Texture": "Psyerns_Interactive_Loadingscreen/gui/textures/psy_ils_layer1_mountains.edds", "Depth": 0.15, "Alpha": 1.0 },
-		{ "Type": "image", "Texture": "Psyerns_Interactive_Loadingscreen/gui/textures/psy_ils_layer2_forest.edds", "Depth": 0.3, "Alpha": 1.0 },
-		{ "Type": "image", "Texture": "Psyerns_Interactive_Loadingscreen/gui/textures/psy_ils_layer3_fog.edds", "Depth": 0.42, "Alpha": 0.85, "SwayAmplitude": 0.012, "SwaySpeed": 0.18 },
-		{ "Type": "particles", "Texture": "Psyerns_Interactive_Loadingscreen/gui/textures/psy_ils_particle.edds", "Additive": true, "Alpha": 0.55, "Count": 24, "MinSize": 3, "MaxSize": 8, "MinDepth": 0.3, "MaxDepth": 0.55, "RiseSpeed": 0.015 },
-		{ "Type": "image", "Texture": "Psyerns_Interactive_Loadingscreen/gui/textures/psy_ils_layer4_ruins.edds", "Depth": 0.6, "Alpha": 1.0 },
-		{ "Type": "cursorlight", "Texture": "Psyerns_Interactive_Loadingscreen/gui/textures/psy_ils_cursorlight.edds", "Additive": true, "Alpha": 0.3, "Size": 0.75, "Smoothing": 7.0 },
-		{ "Type": "particles", "Texture": "Psyerns_Interactive_Loadingscreen/gui/textures/psy_ils_particle.edds", "Additive": true, "Alpha": 0.8, "Count": 18, "MinSize": 6, "MaxSize": 16, "MinDepth": 0.8, "MaxDepth": 1.3, "RiseSpeed": 0.03 },
-		{ "Type": "image", "Texture": "Psyerns_Interactive_Loadingscreen/gui/textures/psy_ils_layer5_foreground.edds", "Depth": 1.0, "Alpha": 1.0 },
-		{ "Type": "image", "Texture": "Psyerns_Interactive_Loadingscreen/gui/textures/psy_ils_vignette.edds", "Depth": 0.0, "Alpha": 1.0 }
+		{"Type": "image", "Texture": "Psyerns_Interactive_Loadingscreen/gui/textures/psy_ils_dme1_bg.edds", "Depth": 0.06, "Alpha": 1.0},
+		{"Type": "image", "Texture": "Psyerns_Interactive_Loadingscreen/gui/textures/psy_ils_dme_smoke.edds", "Depth": 0.3, "Alpha": 0.8, "SwayAmplitude": 0.012, "SwaySpeed": 0.15},
+		{"Type": "particles", "Texture": "Psyerns_Interactive_Loadingscreen/gui/textures/psy_ils_particle.edds", "Additive": true, "Alpha": 0.5, "Count": 22, "MinSize": 3, "MaxSize": 7, "MinDepth": 0.25, "MaxDepth": 0.45, "RiseSpeed": 0.015},
+		{"Type": "image", "Texture": "Psyerns_Interactive_Loadingscreen/gui/textures/psy_ils_dme1_ground.edds", "Depth": 0.5, "Alpha": 1.0},
+		{"Type": "cursorlight", "Texture": "Psyerns_Interactive_Loadingscreen/gui/textures/psy_ils_cursorlight.edds", "Additive": true, "Alpha": 0.22, "Size": 0.8, "Smoothing": 7.0},
+		{"Type": "image", "Texture": "Psyerns_Interactive_Loadingscreen/gui/textures/psy_ils_dme1_face.edds", "Depth": 0.8, "Alpha": 1.0},
+		{"Type": "particles", "Texture": "Psyerns_Interactive_Loadingscreen/gui/textures/psy_ils_particle.edds", "Additive": true, "Alpha": 0.85, "Count": 16, "MinSize": 6, "MaxSize": 15, "MinDepth": 0.8, "MaxDepth": 1.3, "RiseSpeed": 0.03},
+		{"Type": "image", "Texture": "Psyerns_Interactive_Loadingscreen/gui/textures/psy_ils_dme1_text.edds", "Depth": 0.3, "Alpha": 1.0, "NoOverscan": true},
+		{"Type": "image", "Texture": "Psyerns_Interactive_Loadingscreen/gui/textures/psy_ils_vignette.edds", "Depth": 0.0, "Alpha": 1.0}
+	],
+	"LoginTimeLayers": [
+		{"Type": "image", "Texture": "Psyerns_Interactive_Loadingscreen/gui/textures/psy_ils_dme2_bg.edds", "Depth": 0.06, "Alpha": 1.0},
+		{"Type": "image", "Texture": "Psyerns_Interactive_Loadingscreen/gui/textures/psy_ils_dme_smoke.edds", "Depth": 0.3, "Alpha": 0.8, "SwayAmplitude": 0.012, "SwaySpeed": 0.15},
+		{"Type": "particles", "Texture": "Psyerns_Interactive_Loadingscreen/gui/textures/psy_ils_particle.edds", "Additive": true, "Alpha": 0.5, "Count": 22, "MinSize": 3, "MaxSize": 7, "MinDepth": 0.25, "MaxDepth": 0.45, "RiseSpeed": 0.015},
+		{"Type": "image", "Texture": "Psyerns_Interactive_Loadingscreen/gui/textures/psy_ils_dme2_ground.edds", "Depth": 0.5, "Alpha": 1.0},
+		{"Type": "cursorlight", "Texture": "Psyerns_Interactive_Loadingscreen/gui/textures/psy_ils_cursorlight.edds", "Additive": true, "Alpha": 0.22, "Size": 0.8, "Smoothing": 7.0},
+		{"Type": "image", "Texture": "Psyerns_Interactive_Loadingscreen/gui/textures/psy_ils_dme2_face.edds", "Depth": 0.8, "Alpha": 1.0},
+		{"Type": "particles", "Texture": "Psyerns_Interactive_Loadingscreen/gui/textures/psy_ils_particle.edds", "Additive": true, "Alpha": 0.85, "Count": 16, "MinSize": 6, "MaxSize": 15, "MinDepth": 0.8, "MaxDepth": 1.3, "RiseSpeed": 0.03},
+		{"Type": "image", "Texture": "Psyerns_Interactive_Loadingscreen/gui/textures/psy_ils_dme2_text.edds", "Depth": 0.3, "Alpha": 1.0, "NoOverscan": true},
+		{"Type": "image", "Texture": "Psyerns_Interactive_Loadingscreen/gui/textures/psy_ils_vignette.edds", "Depth": 0.0, "Alpha": 1.0}
+	],
+	"LoginQueueLayers": [
+		{"Type": "image", "Texture": "Psyerns_Interactive_Loadingscreen/gui/textures/psy_ils_dme3_bg.edds", "Depth": 0.06, "Alpha": 1.0},
+		{"Type": "image", "Texture": "Psyerns_Interactive_Loadingscreen/gui/textures/psy_ils_dme_smoke.edds", "Depth": 0.3, "Alpha": 0.8, "SwayAmplitude": 0.012, "SwaySpeed": 0.15},
+		{"Type": "particles", "Texture": "Psyerns_Interactive_Loadingscreen/gui/textures/psy_ils_particle.edds", "Additive": true, "Alpha": 0.5, "Count": 22, "MinSize": 3, "MaxSize": 7, "MinDepth": 0.25, "MaxDepth": 0.45, "RiseSpeed": 0.015},
+		{"Type": "image", "Texture": "Psyerns_Interactive_Loadingscreen/gui/textures/psy_ils_dme3_ground.edds", "Depth": 0.5, "Alpha": 1.0},
+		{"Type": "cursorlight", "Texture": "Psyerns_Interactive_Loadingscreen/gui/textures/psy_ils_cursorlight.edds", "Additive": true, "Alpha": 0.22, "Size": 0.8, "Smoothing": 7.0},
+		{"Type": "image", "Texture": "Psyerns_Interactive_Loadingscreen/gui/textures/psy_ils_dme3_face.edds", "Depth": 0.8, "Alpha": 1.0},
+		{"Type": "particles", "Texture": "Psyerns_Interactive_Loadingscreen/gui/textures/psy_ils_particle.edds", "Additive": true, "Alpha": 0.85, "Count": 16, "MinSize": 6, "MaxSize": 15, "MinDepth": 0.8, "MaxDepth": 1.3, "RiseSpeed": 0.03},
+		{"Type": "image", "Texture": "Psyerns_Interactive_Loadingscreen/gui/textures/psy_ils_dme3_text.edds", "Depth": 0.3, "Alpha": 1.0, "NoOverscan": true},
+		{"Type": "image", "Texture": "Psyerns_Interactive_Loadingscreen/gui/textures/psy_ils_vignette.edds", "Depth": 0.0, "Alpha": 1.0}
 	]
 }

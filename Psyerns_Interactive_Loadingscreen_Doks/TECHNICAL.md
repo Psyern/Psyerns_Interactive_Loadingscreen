@@ -10,6 +10,23 @@
 | `LoadingScreen.Inc()` / `SetProgress()` | Progress-Callbacks der Engine | Szene ticken (siehe unten) |
 | `LoginTimeBase.Init()` / `LoginQueueBase.Init()` | Login-Countdown / Queue (auch die `*Static`-Varianten bei `-connect`) | Szene in `layoutRoot`, `Background` ausblenden |
 | `LoginScreenBase.Update(timeslice)` | UIManager bzw. `DayZGame.OnUpdate` für die Static-Varianten | Szene animieren |
+| `DynamicMusicPlayerRegistry.PreloadData()` | Konstruktor jeder Musik-Registry (`MissionBase`) | Menü-Playlist durch `MenuMusicSoundSets` ersetzen |
+
+### Login-Screens: `layoutRoot` wird neu gebaut (im Client verifiziert)
+
+`LoginTimeStatic` (und `LoginQueueStatic`) rufen `Init()` schon im Konstruktor auf; beim Anzeigen über
+`UIManager.ShowScriptedMenu` läuft `Init()` ein zweites Mal und erzeugt ein **neues** `layoutRoot`.
+Eine Szene, die nur einmal angehängt wird, hängt dann am verwaisten ersten Root: Sie tickt unsichtbar weiter,
+während das neue Root das Vanilla-Bild `loading_screen_3_co.edds` zeigt. `PSY_ILS_AttachScene()` prüft deshalb,
+ob die Szene noch Kind des aktuellen `layoutRoot` ist, und baut sie sonst neu auf
+(Diag-Log: `layoutRoot was rebuilt, scene moved to the new root`).
+
+### Menümusik
+
+Kartenspezifische Registries (`DynamicMusicPlayerRegistryNasdara` in 1.30) überschreiben `RegisterTracksMenu()`
+selbst – ein Override nur in der Basisklasse (wie im alten FixedLoadingScreen) greift dort nicht. Der Mod hängt
+sich daher an `PreloadData()`, ruft `super` auf und ersetzt danach `m_TracksMenu`. Das wirkt auf alle Karten,
+in 1.29 und 1.30, und unabhängig von der Ladereihenfolge anderer Musik-Mods.
 
 Alle Einstiegspunkte rufen `PSY_ILS_Tick()` auf, das die Zeit selbst über `GetTickTime()` misst.
 Riesige Frame-Zeiten nach einem Hänger werden auf 0.1 s begrenzt, damit die Glättung nicht springt.
@@ -67,7 +84,7 @@ eigenen Enfusion-EDDS-Encoder (BGRA8, LZ4-Blöcke in 64-KB-Chunks, Mips kleinste
 
 ## Kompatibilität
 
-- Keine Abhängigkeiten, nur `DZ_Data`/`DZ_Scripts`.
+- Keine Abhängigkeiten, nur `DZ_Data`/`DZ_Scripts`/`DZ_Sounds_Effects`.
 - Expansion/Namalsk-Loadingscreens tauschen das (bei uns ausgeblendete) Hintergrundbild – beide Mods laufen nebeneinander,
   sichtbar ist die Parallax-Szene. Logos, Hints und Ladebalken anderer Mods bleiben im Vordergrund.
 - Kein `GetGame()` (DayZ 1.29+), keine 1.30-only-APIs.

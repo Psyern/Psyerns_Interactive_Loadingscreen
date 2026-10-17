@@ -1,0 +1,32 @@
+{
+	"ConfigVersion": 1,
+	"Enabled": true,
+	"OnLoadingScreen": true,
+	"OnLoginScreens": true,
+	"HideDayZLogo": false,
+	"HideModdedWarning": false,
+	"MaxShift": 0.04,
+	"MaxShiftVertical": 0.025,
+	"MaxRollDeg": 0.6,
+	"MouseSmoothing": 4.0,
+	"IdleDriftAfter": 2.5,
+	"IdleDriftStrength": 0.45,
+	"IdleDriftSpeed": 0.25,
+	"BreathingScale": 0.012,
+	"BreathingSpeed": 0.35,
+	"MenuMusicSoundSets": [],
+	"Layers": [
+		{"Type": "image", "Texture": "Psyerns_Interactive_Loadingscreen/gui/textures/psy_ils_layer0_sky.edds", "Depth": 0.05, "Alpha": 1.0},
+		{"Type": "image", "Texture": "Psyerns_Interactive_Loadingscreen/gui/textures/psy_ils_layer1_mountains.edds", "Depth": 0.15, "Alpha": 1.0},
+		{"Type": "image", "Texture": "Psyerns_Interactive_Loadingscreen/gui/textures/psy_ils_layer2_forest.edds", "Depth": 0.3, "Alpha": 1.0},
+		{"Type": "image", "Texture": "Psyerns_Interactive_Loadingscreen/gui/textures/psy_ils_layer3_fog.edds", "Depth": 0.42, "Alpha": 0.85, "SwayAmplitude": 0.012, "SwaySpeed": 0.18},
+		{"Type": "particles", "Texture": "Psyerns_Interactive_Loadingscreen/gui/textures/psy_ils_particle.edds", "Additive": true, "Alpha": 0.55, "Count": 24, "MinSize": 3, "MaxSize": 8, "MinDepth": 0.3, "MaxDepth": 0.55, "RiseSpeed": 0.015},
+		{"Type": "image", "Texture": "Psyerns_Interactive_Loadingscreen/gui/textures/psy_ils_layer4_ruins.edds", "Depth": 0.6, "Alpha": 1.0},
+		{"Type": "cursorlight", "Texture": "Psyerns_Interactive_Loadingscreen/gui/textures/psy_ils_cursorlight.edds", "Additive": true, "Alpha": 0.3, "Size": 0.75, "Smoothing": 7.0},
+		{"Type": "particles", "Texture": "Psyerns_Interactive_Loadingscreen/gui/textures/psy_ils_particle.edds", "Additive": true, "Alpha": 0.8, "Count": 18, "MinSize": 6, "MaxSize": 16, "MinDepth": 0.8, "MaxDepth": 1.3, "RiseSpeed": 0.03},
+		{"Type": "image", "Texture": "Psyerns_Interactive_Loadingscreen/gui/textures/psy_ils_layer5_foreground.edds", "Depth": 1.0, "Alpha": 1.0},
+		{"Type": "image", "Texture": "Psyerns_Interactive_Loadingscreen/gui/textures/psy_ils_vignette.edds", "Depth": 0.0, "Alpha": 1.0}
+	],
+	"LoginTimeLayers": [],
+	"LoginQueueLayers": []
+}

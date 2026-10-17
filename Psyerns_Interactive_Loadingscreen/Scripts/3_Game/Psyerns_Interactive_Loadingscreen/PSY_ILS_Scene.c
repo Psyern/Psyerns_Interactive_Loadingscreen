@@ -60,23 +60,23 @@ class PSY_ILS_Scene
 	protected float m_IdleWeight;
 
 	//! Creates the scene as first (backmost) child of parent. Returns null when disabled or on error.
-	static PSY_ILS_Scene Create(WorkspaceWidget workspace, Widget parent)
+	static PSY_ILS_Scene Create(WorkspaceWidget workspace, Widget parent, array<ref PSY_ILS_LayerData> layers)
 	{
 		PSY_ILS_ConfigData config = PSY_ILS_Config.Get();
-		if (!config || !config.Enabled || config.Layers.Count() == 0)
+		if (!config || !config.Enabled || !layers || layers.Count() == 0)
 			return null;
 
 		if (!workspace || !parent)
 			return null;
 
-		PSY_ILS_Scene scene = new PSY_ILS_Scene(workspace, parent, config);
+		PSY_ILS_Scene scene = new PSY_ILS_Scene(workspace, parent, config, layers);
 		if (!scene.IsValid())
 			return null;
 
 		return scene;
 	}
 
-	void PSY_ILS_Scene(WorkspaceWidget workspace, Widget parent, PSY_ILS_ConfigData config)
+	void PSY_ILS_Scene(WorkspaceWidget workspace, Widget parent, PSY_ILS_ConfigData config, array<ref PSY_ILS_LayerData> layers)
 	{
 		m_Config = config;
 		m_Layers = new array<ref PSY_ILS_Layer>();
@@ -94,7 +94,7 @@ class PSY_ILS_Scene
 		PushBehindSiblings();
 
 		int sort = 0;
-		foreach (PSY_ILS_LayerData data : m_Config.Layers)
+		foreach (PSY_ILS_LayerData data : layers)
 		{
 			if (data.Type == PSY_ILS_Const.TYPE_PARTICLES)
 			{
@@ -212,7 +212,7 @@ class PSY_ILS_Scene
 
 			layer.m_MarginX = 0;
 			layer.m_MarginY = 0;
-			if (depth > 0 || layer.m_Data.SwayAmplitude > 0)
+			if (!layer.m_Data.NoOverscan && (depth > 0 || layer.m_Data.SwayAmplitude > 0))
 			{
 				// shift + sway + what a rotated rectangle needs to still cover the screen, plus 2% safety
 				layer.m_MarginX = m_Config.MaxShift * w * depth + layer.m_Data.SwayAmplitude * w + h * 0.5 * rollSin + w * 0.02;
